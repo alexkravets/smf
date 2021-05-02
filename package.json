@@ -1,0 +1,43 @@
+{
+  "name": "@kravc/smf",
+  "version": "1.0.0",
+  "description": "Social media feeds — a simple library to follow YouTube, Instagram and Twitter feeds.",
+  "keywords": [
+    "Twitter",
+    "YouTube",
+    "Instagram"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/alexkravets/smf.git"
+  },
+  "directories": {
+    "src": "src"
+  },
+  "scripts": {
+    "test": "eslint src/ && NODE_PATH=./src nyc mocha \"./src/**/*.spec.js\""
+  },
+  "author": "Oleksandr Kravets <a@kra.vc>",
+  "license": "ISC",
+  "dependencies": {
+    "@kravc/request": "^1.0.0",
+    "lodash.isobject": "^3.0.2",
+    "lodash.last": "^3.0.0",
+    "lodash.trim": "^4.5.1",
+    "sax": "^1.2.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint": "^7.12.1",
+    "mocha": "^8.2.1",
+    "nyc": "^15.1.0"
+  },
+  "mocha": {
+    "timeout": 15000
+  },
+  "nyc": {
+    "include": "src",
+    "exclude": "**/*.spec.js"
+  }
+}
