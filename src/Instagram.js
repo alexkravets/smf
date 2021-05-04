@@ -83,17 +83,16 @@ class Instagram extends Feed {
 
     }
 
-    const profileUrl = `${INTAGRAM_URL}/${username}/`
-
     let isBotDetected
 
     isBotDetected = username === 'accounts'
 
     /* istanbul ignore next: instagram blocks by IP randomly */
     if (isBotDetected) {
-      throw new Error(`Instagram: Profile page is not available at the moment, ${profileUrl}`)
+      throw new Error(`Instagram: Profile page is not available at the moment, ${normalizedUrl}`)
     }
 
+    const profileUrl = `${INTAGRAM_URL}/${username}/`
     const parser     = new Parser({ pageTitle: 'html.head.title.text.@value' })
     const { pageTitle, _html: html } = await parser.parse(profileUrl)
 

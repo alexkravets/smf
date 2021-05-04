@@ -120,9 +120,16 @@ class Twitter extends Feed {
     }
 
     const reponse = await httpRequest(options)
-    const html = reponse.body.toString()
 
-    const [ , token ] = html.match(/\("gt=(\d+);/)
+    const html  = reponse.body.toString()
+    const match = html.match(/\("gt=(\d+);/)
+
+    /* istanbul ignore next: Happens on AWS servers */
+    if (!match) {
+      throw new Error('Twitter: Guest token refresh failed')
+    }
+
+    const [ , token ] = match
 
     Twitter._guestToken = token
   }

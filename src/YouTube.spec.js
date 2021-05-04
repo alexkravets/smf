@@ -17,7 +17,7 @@ describe('Youtube', () => {
 
       expect(attributes).to.include({
         id:    'UCtI0Hodo5o5dUb67FeUjDeA',
-        url:   'https://www.youtube.com/watch?v=C8JyvzU0CXU',
+        url:   'https://www.youtube.com/channel/UCtI0Hodo5o5dUb67FeUjDeA',
         title: 'SpaceX'
       })
     })
