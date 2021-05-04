@@ -83,6 +83,8 @@ class Instagram extends Feed {
 
     }
 
+    const profileUrl = `${INTAGRAM_URL}/${username}/`
+
     let isBotDetected
 
     isBotDetected = username === 'accounts'
@@ -92,7 +94,6 @@ class Instagram extends Feed {
       throw new Error(`Instagram: Profile page is not available at the moment, ${profileUrl}`)
     }
 
-    const profileUrl = `${INTAGRAM_URL}/${username}/`
     const parser     = new Parser({ pageTitle: 'html.head.title.text.@value' })
     const { pageTitle, _html: html } = await parser.parse(profileUrl)
 
