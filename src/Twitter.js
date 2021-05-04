@@ -104,7 +104,7 @@ class Twitter extends Feed {
     const twitter = new Twitter(username)
     const { userId: id, name: title } = await twitter.getUser()
 
-    return { id, title, url: accountUrl }
+    return { id, title, url: accountUrl, type: 'tw' }
   }
 
   static get guestToken() {

@@ -112,7 +112,7 @@ class Instagram extends Feed {
 
     const id = userId
 
-    return { id, title, url: profileUrl}
+    return { id, title, url: profileUrl, type: 'yt' }
   }
 }
 

@@ -47,7 +47,7 @@ class Youtube extends Atom {
     const { title } = await channelParser.parse(feedUrl)
     const id = channelId
 
-    return { id, url: canonicalUrl, title }
+    return { id, url: canonicalUrl, title, type: 'yt' }
   }
 }
 
