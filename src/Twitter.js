@@ -61,14 +61,14 @@ class Twitter extends Feed {
     const variables = JSON.stringify({ screen_name: this._username, withHighlightedLabel: false })
     const url       = `${operationId}?variables=${variables}`
 
-    const { object: { data: { user }, errors } } = await this._jsonRequest(url)
+    const { object: { data, errors } } = await this._jsonRequest(url)
 
     if (errors) {
       const [ error ] = errors
       throw new Error(`Twitter: ${error.message}`)
     }
 
-    const { rest_id: userId, legacy: { name } }  = user
+    const { rest_id: userId, legacy: { name } } = data.user
 
     return { userId, name }
   }
