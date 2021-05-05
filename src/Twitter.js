@@ -14,11 +14,12 @@ const DEFAULT_HEADERS = {
 }
 
 class Twitter extends Feed {
-  constructor(username, userId) {
+  constructor(username, userId, options = {}) {
     super(TWITTER_URL)
 
-    this._userId   = userId
-    this._username = username.replace(`${TWITTER_URL}/`, '').split('/')[0]
+    this._userId     = userId
+    this._username   = username.replace(`${TWITTER_URL}/`, '').split('/')[0]
+    this._guestToken = options.guestToken
   }
 
   async getRawItems() {
@@ -73,8 +74,8 @@ class Twitter extends Feed {
   }
 
   async _jsonRequest(url) {
-    if (!Twitter.guestToken) {
-      await Twitter.refreshGuestToken()
+    if (!this._guestToken) {
+      this._guestToken = await Twitter.createGuestToken()
     }
 
     const options = {
@@ -82,7 +83,7 @@ class Twitter extends Feed {
       headers: {
         ...DEFAULT_HEADERS,
         authorization:   BEARER_TOKEN,
-        'x-guest-token': Twitter.guestToken
+        'x-guest-token': this._guestToken
       }
     }
 
@@ -96,42 +97,39 @@ class Twitter extends Feed {
     ]
   }
 
-  static async getFeedAttributes(url) {
+  static async getFeedAttributes(url, options) {
     const [ username ] = url.split('.com/')[1].split('/')
 
     const accountUrl = `${TWITTER_URL}/${username}`.toLowerCase()
 
-    const twitter = new Twitter(username)
+    const twitter = new Twitter(username, null, options)
     const { userId: id, name: title } = await twitter.getUser()
 
     return { id, title, url: accountUrl, type: 'tw' }
   }
 
-  static get guestToken() {
-    return Twitter._guestToken
-  }
-
-  static async refreshGuestToken() {
+  static async createGuestToken(requestOptions = {}) {
     const options = {
       url: TWITTER_URL,
       headers: {
         ...DEFAULT_HEADERS
-      }
+      },
+      ...requestOptions
     }
 
-    const reponse = await httpRequest(options)
+    const response = await httpRequest(options)
 
-    const html  = reponse.body.toString()
+    const html  = response.body.toString()
     const match = html.match(/\("gt=(\d+);/)
 
-    /* istanbul ignore next: Happens on AWS servers */
+    /* istanbul ignore next: AWS IP addresses are blocked. */
     if (!match) {
-      throw new Error('Twitter: Guest token refresh failed')
+      throw new Error('Twitter: Guest token not found')
     }
 
     const [ , token ] = match
 
-    Twitter._guestToken = token
+    return token
   }
 }
 
